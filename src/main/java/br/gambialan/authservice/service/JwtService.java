@@ -8,8 +8,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-import java.security.NoSuchAlgorithmException;
 import java.security.interfaces.RSAPublicKey;
 import java.util.Date;
 import java.util.HashMap;
@@ -27,6 +25,7 @@ public class JwtService {
         Map<String, Object> claims = new HashMap<>();
         claims.put("id",1);
         claims.put("u", sub);
+        claims.put("scope", "admin");
         return createToken(claims);
     }
 
@@ -37,7 +36,7 @@ public class JwtService {
                 .setSubject("Alan")
                 .setHeaderParam("kid", "sso-key")
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 3600))
+                .setExpiration(new Date(System.currentTimeMillis() + 3600000))
                 .signWith(keyPair.getPrivate(), SignatureAlgorithm.RS256)
                 .compact();
     }
